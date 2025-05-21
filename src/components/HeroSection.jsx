@@ -5,7 +5,7 @@ export default function HeroSection() {
     <Box as="section" className="space-y-4" pt={12}>
       <Heading as="h1" size="xl" className="font-bold">Hi, I'm Patrick</Heading>
       <Heading as="h2" size="lg" className="text-[#AE81FF] font-semibold">Senior PHP Developer</Heading>
-      <Text fontSize="lg">E-Commerce • AI • Tech-Nerd since 2005</Text>
+      <Text fontSize="lg">E-Commerce • AI • Tech-Nerd since 1992</Text>
       <Text className="text-gray-400 max-w-xl">
         I'm a senior PHP developer specializing in e-commerce software, with a growing interest in AI and AI agents.
       </Text>
