@@ -28,7 +28,7 @@ services:
           memory: 256M
       placement:
         constraints:
-          - node.role == worker
+          - node.role == manager
     networks:
       - website-network
     environment:
