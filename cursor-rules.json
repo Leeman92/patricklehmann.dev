@@ -1,0 +1,83 @@
+{
+    "extends": ["cursor.directory/front-end-cursor-rules"],
+    "uiGuidelines": {
+      "defaultStylingLibrary": "tailwind",
+      "componentLibrary": "chakra-ui",
+      "useComponentLibraryFor": [
+        "modals",
+        "menus",
+        "toasts",
+        "form inputs",
+        "layout containers",
+        "buttons",
+        "cards"
+      ],
+      "preferTailwindFor": [
+        "colors",
+        "spacing",
+        "typography",
+        "animations",
+        "custom utilities"
+      ]
+    },
+    "projectStructure": {
+      "reactRoot": "src",
+      "componentsDir": "src/components",
+      "legacyHtml": "src_bak/index.html",
+      "tailwindConfig": "tailwind.config.js",
+      "viteConfig": "vite.config.js",
+      "stylesDir": "src/index.css"
+    },
+    "devProcess": {
+      "devCommand": "docker compose up",
+      "devPort": 3000,
+      "devServer": "Vite",
+      "devWorkingDir": "/app"
+    },
+    "buildProcess": {
+      "buildCommand": "npm run build",
+      "cssHashing": true,
+      "nginxForProd": true,
+      "prodDir": "dist"
+    },
+    "dependencies": {
+      "ui": ["@chakra-ui/react", "@emotion/react", "@emotion/styled", "framer-motion"],
+      "slider": ["swiper"],
+      "styling": ["tailwindcss", "postcss", "autoprefixer"],
+      "framework": ["react", "react-dom", "vite", "@vitejs/plugin-react"]
+    },
+    "notes": [
+      "Use Tailwind for most styling and layout.",
+      "Use Chakra UI for complex UI elements and layout containers.",
+      "All UI components are in src/components.",
+      "Legacy HTML is in src_bak for reference.",
+      "Tech stack slider uses Swiper.js with React bindings.",
+      "Development runs in Docker container, no local Node.js required.",
+      "Production build uses hashed CSS for cache busting."
+    ],
+    "rules": [
+      {
+        "pattern": "src/**/*.{js,jsx,ts,tsx}",
+        "description": "React components and JavaScript/TypeScript files"
+      },
+      {
+        "pattern": "src/**/*.css",
+        "description": "CSS and Tailwind styles"
+      },
+      {
+        "pattern": "public/**/*",
+        "description": "Static assets"
+      },
+      {
+        "pattern": "*.{js,json,yml,yaml}",
+        "description": "Configuration files"
+      }
+    ],
+    "ignore": [
+      "node_modules",
+      "dist",
+      ".git",
+      "*.log"
+    ]
+}
+  
