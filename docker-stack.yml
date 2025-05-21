@@ -9,18 +9,43 @@ services:
         parallelism: 1
         delay: 10s
         order: start-first
+        failure_action: rollback
+        monitor: 30s
       restart_policy:
         condition: on-failure
         max_attempts: 3
+        window: 120s
       rollback_config:
         parallelism: 1
         delay: 10s
         order: start-first
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      placement:
+        constraints:
+          - node.role == worker
     networks:
       - website-network
     environment:
       - NODE_ENV=production
+    labels:
+      - "com.patricklehmann.description=Personal Website"
+      - "com.patricklehmann.maintainer=patrick@patricklehmann.dev"
+      - "com.patricklehmann.version=1.0"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   website-network:
-    external: true 
+    external: true
+    driver: overlay
+    driver_opts:
+      encrypted: "true" 

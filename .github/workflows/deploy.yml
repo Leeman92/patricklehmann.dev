@@ -56,6 +56,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: patrick
+          port: ${{ secrets.SERVER_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-stack.yml"
+          target: "/home/patrick/website"
+          strip_components: 0
+
       - name: SSH into server and deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -78,12 +89,17 @@ jobs:
             echo "Setting up network..."
             docker network create --driver overlay website-network || true
             
+            # Clean up old images
+            echo "Cleaning up old images..."
+            docker image prune -f --filter "until=24h"
+            
             # Pull the latest image
             echo "Pulling latest image..."
             docker pull harbor.patricklehmann.dev/website/website:latest
             
             # Deploy the stack
             echo "Deploying stack..."
+            cd /home/patrick/website
             docker stack deploy -c docker-stack.yml website
             
             # Wait for services to be ready
@@ -100,6 +116,26 @@ jobs:
             
             if [ $timeout -eq 0 ]; then
               echo "Service deployment failed!"
+              docker service logs website_website
+              exit 1
+            fi
+            
+            # Verify deployment
+            echo "Verifying deployment..."
+            sleep 10  # Give services time to stabilize
+            
+            # Check service health
+            if ! docker service ls | grep website_website | grep -q "2/2"; then
+              echo "Service health check failed!"
+              docker service logs website_website
+              exit 1
+            fi
+            
+            # Check container health
+            unhealthy_containers=$(docker ps --filter "health=unhealthy" --filter "name=website" --format "{{.Names}}")
+            if [ ! -z "$unhealthy_containers" ]; then
+              echo "Found unhealthy containers:"
+              echo "$unhealthy_containers"
               docker service logs website_website
               exit 1
             fi
