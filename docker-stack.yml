@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   website:
-    image: patricklehmann/website:latest
+    image: harbor.patricklehmann.dev/website/website:latest
     ports:
       - target: 3000
         published: 3000
