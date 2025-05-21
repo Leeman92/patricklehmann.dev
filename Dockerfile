@@ -40,6 +40,13 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
 # Expose port 3000
 EXPOSE 3000
 

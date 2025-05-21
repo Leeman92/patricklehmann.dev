@@ -5,8 +5,10 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      image: harbor.patricklehmann.dev/website/website:latest
 
     steps:
       - name: Checkout repo
@@ -45,6 +47,15 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: SSH into server and deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -57,48 +68,39 @@ jobs:
             set -e
             echo "Starting deployment..."
             
+            # Initialize swarm if not already initialized
+            if ! docker info | grep -q "Swarm: active"; then
+              echo "Initializing Docker Swarm..."
+              docker swarm init
+            fi
+            
+            # Create network if it doesn't exist
+            echo "Setting up network..."
+            docker network create --driver overlay website-network || true
+            
             # Pull the latest image
             echo "Pulling latest image..."
             docker pull harbor.patricklehmann.dev/website/website:latest
             
-            # Stop and remove existing container
-            echo "Stopping existing container..."
-            docker stop website || true
-            docker rm website || true
+            # Deploy the stack
+            echo "Deploying stack..."
+            docker stack deploy -c docker-stack.yml website
             
-            # Clean up old images
-            echo "Cleaning up old images..."
-            docker image prune -f
-            
-            # Create network if it doesn't exist
-            echo "Setting up network..."
-            docker network create website-network || true
-            
-            # Run the new container
-            echo "Starting new container..."
-            docker run -d \
-              --name website \
-              --restart=always \
-              --network website-network \
-              -p 3000:3000 \
-              -e NODE_ENV=production \
-              harbor.patricklehmann.dev/website/website:latest
-            
-            # Wait for container to be healthy
-            echo "Waiting for container to be healthy..."
-            timeout=60
+            # Wait for services to be ready
+            echo "Waiting for services to be ready..."
+            timeout=120
             while [ $timeout -gt 0 ]; do
-              if curl -s http://localhost:3000 > /dev/null; then
-                echo "Container is healthy!"
+              if docker service ls | grep website_website | grep -q "2/2"; then
+                echo "All replicas are running!"
                 break
               fi
-              sleep 1
-              timeout=$((timeout-1))
+              sleep 2
+              timeout=$((timeout-2))
             done
             
             if [ $timeout -eq 0 ]; then
-              echo "Container health check failed!"
-              docker logs website
+              echo "Service deployment failed!"
+              docker service logs website_website
               exit 1
             fi
             
