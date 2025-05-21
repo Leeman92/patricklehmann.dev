@@ -17,23 +17,19 @@ const techStack = [
   { src: 'https://cdn.simpleicons.org/typescript/white', label: 'TypeScript' },
   { src: 'https://cdn.simpleicons.org/react/white', label: 'React' },
   { src: 'https://cdn.simpleicons.org/nextdotjs/white', label: 'Next.js' },
+  { src: 'https://cdn.simpleicons.org/vite/white', label: 'Vite' },
+  { src: 'https://cdn.simpleicons.org/tailwindcss/white', label: 'Tailwind' },
+  { src: 'https://cdn.simpleicons.org/chakraui/white', label: 'Chakra UI' },
+  { src: 'https://cdn.simpleicons.org/nginx/white', label: 'Nginx' },
   { src: 'https://cdn.simpleicons.org/docker/white', label: 'Docker' },
   { src: 'https://cdn.simpleicons.org/git/white', label: 'Git' },
   { src: 'https://cdn.simpleicons.org/gitlab/white', label: 'GitLab' },
   { src: 'https://cdn.simpleicons.org/graphql/white', label: 'GraphQL' },
-  { svg: 'rest', label: 'REST' },
   { src: 'https://cdn.simpleicons.org/mongodb/white', label: 'MongoDB' },
   { src: 'https://cdn.simpleicons.org/mysql/white', label: 'MySQL' },
 ]
 
 function renderIcon(item) {
-  if (item.svg === 'rest') {
-    return (
-      <svg className="tech-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="currentColor"/>
-      </svg>
-    )
-  }
   if (item.svg) {
     return (
       <svg className="tech-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
