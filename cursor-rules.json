@@ -67,6 +67,12 @@
           "type": "overlay",
           "encrypted": true,
           "attachable": true
+        },
+        "ports": {
+          "target": 3000,
+          "published": 3000,
+          "protocol": "tcp",
+          "mode": "host"
         }
       }
     },
@@ -93,7 +99,8 @@
       "Resource limits and reservations configured for optimal performance.",
       "Encrypted overlay network for secure container communication.",
       "Log rotation configured to prevent disk space issues.",
-      "Automatic cleanup of old images to maintain system health."
+      "Automatic cleanup of old images to maintain system health.",
+      "Port 3000 exposed for nginx proxy pass with host network mode."
     ],
     "rules": [
       {
