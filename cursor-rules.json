@@ -100,7 +100,11 @@
       "Encrypted overlay network for secure container communication.",
       "Log rotation configured to prevent disk space issues.",
       "Automatic cleanup of old images to maintain system health.",
-      "Port 3000 exposed for nginx proxy pass with host network mode."
+      "Port 3000 exposed for nginx proxy pass with host network mode.",
+      "Single server setup - no placement constraints needed",
+      "Port 3000 exposed for Nginx proxy pass with ingress network mode",
+      "Using overlay network for service discovery",
+      "Resource limits set to prevent container overload"
     ],
     "rules": [
       {
