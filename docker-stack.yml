@@ -29,6 +29,11 @@ services:
       placement:
         constraints:
           - node.role == manager
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: host
     networks:
       - website-network
     environment:
