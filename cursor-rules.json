@@ -27,7 +27,12 @@
       "tailwindConfig": "tailwind.config.js",
       "viteConfig": "vite.config.ts",
       "stylesDir": "src/index.css",
-      "eslintConfig": "eslint.config.js"
+      "eslintConfig": "eslint.config.js",
+      "dockerConfig": {
+        "dev": "docker-compose.yml",
+        "prod": "Dockerfile",
+        "stack": "docker-stack.yml"
+      }
     },
     "devProcess": {
       "devCommand": "docker compose up",
@@ -39,14 +44,21 @@
       "buildCommand": "npm run build",
       "cssHashing": true,
       "nginxForProd": true,
-      "prodDir": "dist"
+      "prodDir": "dist",
+      "deployment": {
+        "type": "docker-swarm",
+        "replicas": 2,
+        "updateStrategy": "rolling",
+        "healthCheck": true
+      }
     },
     "dependencies": {
       "ui": ["@chakra-ui/react", "@emotion/react", "@emotion/styled", "framer-motion"],
       "slider": ["swiper"],
       "styling": ["tailwindcss", "postcss", "autoprefixer"],
       "framework": ["react", "react-dom", "vite", "@vitejs/plugin-react"],
-      "linting": ["@eslint/js", "globals", "eslint-plugin-react-hooks", "eslint-plugin-react-refresh"]
+      "linting": ["@eslint/js", "globals", "eslint-plugin-react-hooks", "eslint-plugin-react-refresh"],
+      "deployment": ["docker", "docker-swarm", "nginx"]
     },
     "notes": [
       "Use Tailwind for most styling and layout.",
@@ -56,7 +68,10 @@
       "Tech stack slider uses Swiper.js with React bindings.",
       "Development runs in Docker container, no local Node.js required.",
       "Production build uses hashed CSS for cache busting.",
-      "ESLint configuration is in root directory."
+      "ESLint configuration is in root directory.",
+      "Production deployment uses Docker Swarm with 2 replicas for high availability.",
+      "Zero-downtime deployments with rolling updates.",
+      "Automatic failover and health checks implemented."
     ],
     "rules": [
       {
