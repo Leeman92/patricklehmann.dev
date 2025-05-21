@@ -2,23 +2,14 @@ version: '3.8'
 
 services:
   website:
-    image: harbor.patricklehmann.dev/website/website:latest
+    image: patricklehmann/website:latest
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: ingress
     deploy:
       replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-        order: start-first
-        failure_action: rollback
-        monitor: 30s
-      restart_policy:
-        condition: on-failure
-        max_attempts: 3
-        window: 120s
-      rollback_config:
-        parallelism: 1
-        delay: 10s
-        order: start-first
       resources:
         limits:
           cpus: '0.50'
@@ -26,30 +17,45 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+        monitor: 30s
+      rollback_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+        failure_action: pause
+        monitor: 30s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
       placement:
         constraints:
-          - node.role == manager
-    ports:
-      - target: 3000
-        published: 3000
-        protocol: tcp
-        mode: host
+          - node.role == worker
     networks:
       - website-network
-    environment:
-      - NODE_ENV=production
-    labels:
-      - "com.patricklehmann.description=Personal Website"
-      - "com.patricklehmann.maintainer=patrick@patricklehmann.dev"
-      - "com.patricklehmann.version=1.0"
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
+    labels:
+      - "com.docker.stack.description=Patrick Lehmann's Personal Website"
+      - "com.docker.stack.namespace=website"
+      - "com.docker.stack.maintainer=Patrick Lehmann"
+      - "com.docker.stack.version=1.0.0"
 
 networks:
   website-network:
     driver: overlay
+    attachable: true
     driver_opts:
-      encrypted: "true" 
+      encrypted: "true"
+    labels:
+      - "com.docker.stack.description=Website Network"
+      - "com.docker.stack.namespace=website" 
