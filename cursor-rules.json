@@ -25,8 +25,9 @@
       "componentsDir": "src/components",
       "legacyHtml": "src_bak/index.html",
       "tailwindConfig": "tailwind.config.js",
-      "viteConfig": "vite.config.js",
-      "stylesDir": "src/index.css"
+      "viteConfig": "vite.config.ts",
+      "stylesDir": "src/index.css",
+      "eslintConfig": "eslint.config.js"
     },
     "devProcess": {
       "devCommand": "docker compose up",
@@ -44,7 +45,8 @@
       "ui": ["@chakra-ui/react", "@emotion/react", "@emotion/styled", "framer-motion"],
       "slider": ["swiper"],
       "styling": ["tailwindcss", "postcss", "autoprefixer"],
-      "framework": ["react", "react-dom", "vite", "@vitejs/plugin-react"]
+      "framework": ["react", "react-dom", "vite", "@vitejs/plugin-react"],
+      "linting": ["@eslint/js", "globals", "eslint-plugin-react-hooks", "eslint-plugin-react-refresh"]
     },
     "notes": [
       "Use Tailwind for most styling and layout.",
@@ -53,7 +55,8 @@
       "Legacy HTML is in src_bak for reference.",
       "Tech stack slider uses Swiper.js with React bindings.",
       "Development runs in Docker container, no local Node.js required.",
-      "Production build uses hashed CSS for cache busting."
+      "Production build uses hashed CSS for cache busting.",
+      "ESLint configuration is in root directory."
     ],
     "rules": [
       {
@@ -69,7 +72,7 @@
         "description": "Static assets"
       },
       {
-        "pattern": "*.{js,json,yml,yaml}",
+        "pattern": "*.{js,json,yml,yaml,ts}",
         "description": "Configuration files"
       }
     ],

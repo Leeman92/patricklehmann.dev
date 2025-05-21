@@ -34,6 +34,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          target: production
           push: true
           tags: harbor.patricklehmann.dev/website/website:latest
           cache-from: type=local,src=/tmp/.buildx-cache
